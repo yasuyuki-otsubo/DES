@@ -1,0 +1,14 @@
+# key on google:discrete event simulation open source software
+#
+http://jaamsim.com/
+https://en.wikipedia.org/wiki/List_of_discrete_event_simulation_software
+https://en.wikibooks.org/wiki/Simulation_with_AnyLogic/Discrete_Event_Simulation
+
+
+#
+# key on google:discrete event simulation excel
+#
+#
+http://www.informs-sim.org/wsc06papers/293.pdf
+http://www.cekerevac.eu/biblioteka/ij_17.pdf
+http://users.iems.northwestern.edu/~nelsonb/IEMS435/code.htm
