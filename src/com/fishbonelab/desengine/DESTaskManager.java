@@ -75,18 +75,18 @@ public class DESTaskManager {
 			try {
 				//
 				// イベントを作成する
+				// 1) 期間または回数を基に実行するイベントを全て作成する
 				now = this.generator.getStartTime();
 				step = this.generator.getDuration();
 				//
 				this.generator.generate();
+				//
 				// 設定された期間を実行する
-				// 1) 期間または回数を基に実行するイベントを全て作成する
 				while (!this.isFinished()) {
 					this.doOneStep(now);
 					now += step;
 				}
 			} catch (Exception e) {
-				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			}
 		}

@@ -40,12 +40,12 @@ public class TestSimple1 {
 		generator.setName("開始");
 		generator.setTime(0);
 		generator.setStartTime(0);
-		generator.setEndTime(100);
+		generator.setEndTime(20);
 		generator.setDuration(10);
 		//
 		activity1.setId(2);
 		activity1.setName("処理する");
-		activity1.setWorkingTime(5);
+		activity1.setWorkingTime(11);
 		//
 		terminater.setId(3);
 		terminater.setName("完了");

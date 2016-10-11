@@ -54,6 +54,7 @@ public class DESActivity extends DESObject {
 		//
 		// 時計を進める
 		long now = past + this.workingTime;
+		// long now = past;
 		this.setTime(now);
 		//
 		// redundant している個数分イベント処理を行う
@@ -70,6 +71,7 @@ public class DESActivity extends DESObject {
 				event.setProcessStartTime(past);
 				Log.processStart(event, this);
 				event.setProcessEndTime(now);
+				event.setTime(now);
 				Log.processEnd(event, this);
 				//
 				// 送るイベントを待ち行列から削除する
@@ -94,6 +96,10 @@ public class DESActivity extends DESObject {
 		//
 		// イベントを待ち行列に入れる
 		if (event != null) {
+			/// < イベント生成時に誕生時刻を設定しているため、その時刻以降を設定する
+			if (now < event.getTime()) {
+				now = event.getTime();
+			}
 			event.setArrivalTime(now);
 			Log.arrival(event, this);
 			this.queue.add(event);
