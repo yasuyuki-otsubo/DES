@@ -5,6 +5,8 @@ package com.fishbonelab.desengine;
 
 import java.util.LinkedList;
 
+import com.fishbonelab.desengine.utils.Log;
+
 /**
  * @author otuboyas
  *
@@ -56,6 +58,9 @@ public class DESTerminater extends DESActivity {
 				//
 				// 送るイベントを待ち行列から削除する
 				this.queue.pollFirst();
+				//
+				//
+				Log.end(event, this);
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import com.fishbonelab.desengine.DESActivity;
 import com.fishbonelab.desengine.DESGenerator;
 import com.fishbonelab.desengine.DESTaskManager;
 import com.fishbonelab.desengine.DESTerminater;
+import com.fishbonelab.desengine.utils.Log;
 
 /**
  * @author otuboyas
@@ -36,11 +37,18 @@ public class TestSimple1 {
 
 		/// < ノードを定義する
 		generator.setId(1);
-		generator.setName("イベントを作成する");
+		generator.setName("開始");
 		generator.setTime(0);
 		generator.setStartTime(0);
 		generator.setEndTime(100);
 		generator.setDuration(10);
+		//
+		activity1.setId(2);
+		activity1.setName("処理する");
+		activity1.setWorkingTime(5);
+		//
+		terminater.setId(3);
+		terminater.setName("完了");
 
 		/// < ノード間を接続する ( set network among nodes.)
 		generator.setOutNode(activity1);
@@ -52,6 +60,7 @@ public class TestSimple1 {
 		manager.setGenerator(generator);
 		//
 		/// 実行する
+		Log.header();
 		manager.simulate();
 	}
 

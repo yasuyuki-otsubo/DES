@@ -5,11 +5,13 @@ package com.fishbonelab.desengine;
 
 import java.util.LinkedList;
 
+import com.fishbonelab.desengine.utils.Log;
+
 /**
  * @author otuboyas
  *
  */
-public class DESGenerator extends DESObject {
+public class DESGenerator extends DESActivity {
 
 	private DESActivity outNode;
 	private LinkedList<DESEvent> queue;
@@ -99,17 +101,21 @@ public class DESGenerator extends DESObject {
 		}
 		//
 		int id = 1;
-		for (long now = startTime; startTime < endTime; now += duration) {
+		for (long now = startTime; now < endTime; now += duration) {
 			DESEvent event = new DESEvent();
 			event.setId(id);
 			event.setName("customer " + String.valueOf(id));
 			//
 			event.setTime(now);
+			Log.start(event, this);
 			this.outNode.setEvent(event);
+			//
+			id++;
 		}
 
 	}
 
+	@Override
 	public void setEvent(DESEvent event) {
 		long now = this.getTime();
 		//
@@ -126,6 +132,7 @@ public class DESGenerator extends DESObject {
 	/**
 	 * @return workingTime
 	 */
+	@Override
 	public long getWorkingTime() {
 		return workingTime;
 	}
@@ -133,6 +140,7 @@ public class DESGenerator extends DESObject {
 	/**
 	 * @param workingTime セットする workingTime
 	 */
+	@Override
 	public void setWorkingTime(long workingTime) {
 		this.workingTime = workingTime;
 	}
@@ -140,6 +148,7 @@ public class DESGenerator extends DESObject {
 	/**
 	 * @return redundantType
 	 */
+	@Override
 	public long getRedundantType() {
 		return redundantType;
 	}
@@ -147,6 +156,7 @@ public class DESGenerator extends DESObject {
 	/**
 	 * @param redundantType セットする redundantType
 	 */
+	@Override
 	public void setRedundantType(long redundantType) {
 		this.redundantType = redundantType;
 	}
@@ -154,6 +164,7 @@ public class DESGenerator extends DESObject {
 	/**
 	 * @return redundantNumber
 	 */
+	@Override
 	public long getRedundantNumber() {
 		return redundantNumber;
 	}
@@ -161,6 +172,7 @@ public class DESGenerator extends DESObject {
 	/**
 	 * @param redundantNumber セットする redundantNumber
 	 */
+	@Override
 	public void setRedundantNumber(long redundantNumber) {
 		this.redundantNumber = redundantNumber;
 	}
@@ -210,6 +222,7 @@ public class DESGenerator extends DESObject {
 	/**
 	 * @return outNode
 	 */
+	@Override
 	public DESActivity getOutNode() {
 		return outNode;
 	}
@@ -217,6 +230,7 @@ public class DESGenerator extends DESObject {
 	/**
 	 * @param outNode セットする outNode
 	 */
+	@Override
 	public void setOutNode(DESActivity outNode) {
 		this.outNode = outNode;
 	}
