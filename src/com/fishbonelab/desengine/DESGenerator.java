@@ -11,37 +11,27 @@ import java.util.LinkedList;
  */
 public class DESGenerator extends DESObject {
 
-	private DESGenerator outNode;
+	private DESActivity outNode;
 	private LinkedList<DESEvent> queue;
 
 	private long workingTime;
 	private long redundantType;
 	private long redundantNumber;
 
+	private long startTime;
+	private long endTime;
+	private long duration;
+
 	/**
 	 *
 	 */
 	public DESGenerator() {
-		setOutNode(null);
+		outNode = null;
 		queue = new LinkedList<DESEvent>();
 		//
 		workingTime = 1; /// < 処理時間は、通常1以上の値を設定する。単位は、ミリ秒
 		setRedundantType(0); /// < 現状では、均等分散のみ
 		setRedundantNumber(1); /// < 並列計数は1以上の値を設定する
-	}
-
-	/**
-	 * @return outNode
-	 */
-	public DESGenerator getOutNode() {
-		return outNode;
-	}
-
-	/**
-	 * @param outNode セットする outNode
-	 */
-	public void setOutNode(DESGenerator outNode) {
-		this.outNode = outNode;
 	}
 
 	/**
@@ -82,6 +72,42 @@ public class DESGenerator extends DESObject {
 				}
 			}
 		}
+	}
+
+	public void generate() throws Exception {
+		/// < 設定値のチェック
+		if (startTime < 0) {
+			throw new Exception();
+		}
+		if (endTime < 0) {
+			throw new Exception();
+		}
+		if (duration < 0) {
+			throw new Exception();
+		}
+		if (endTime <= startTime) {
+			throw new Exception();
+		}
+		if (duration == 0) {
+			throw new Exception();
+		}
+		if (outNode == null) {
+			throw new Exception();
+		}
+		if (!(outNode instanceof DESActivity)) {
+			throw new Exception();
+		}
+		//
+		int id = 1;
+		for (long now = startTime; startTime < endTime; now += duration) {
+			DESEvent event = new DESEvent();
+			event.setId(id);
+			event.setName("customer " + String.valueOf(id));
+			//
+			event.setTime(now);
+			this.outNode.setEvent(event);
+		}
+
 	}
 
 	public void setEvent(DESEvent event) {
@@ -137,5 +163,61 @@ public class DESGenerator extends DESObject {
 	 */
 	public void setRedundantNumber(long redundantNumber) {
 		this.redundantNumber = redundantNumber;
+	}
+
+	/**
+	 * @return startTime
+	 */
+	public long getStartTime() {
+		return startTime;
+	}
+
+	/**
+	 * @param startTime セットする startTime
+	 */
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
+
+	/**
+	 * @return endTime
+	 */
+	public long getEndTime() {
+		return endTime;
+	}
+
+	/**
+	 * @param endTime セットする endTime
+	 */
+	public void setEndTime(long endTime) {
+		this.endTime = endTime;
+	}
+
+	/**
+	 * @return duration
+	 */
+	public long getDuration() {
+		return duration;
+	}
+
+	/**
+	 * @param duration セットする duration
+	 */
+	public void setDuration(long duration) {
+		this.duration = duration;
+	}
+
+	/**
+	 * @return outNode
+	 */
+	public DESActivity getOutNode() {
+		return outNode;
+	}
+
+	/**
+	 * @param outNode セットする outNode
+	 */
+	public void setOutNode(DESActivity outNode) {
+		this.outNode = outNode;
 	}
 }

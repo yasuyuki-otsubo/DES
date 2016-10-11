@@ -9,9 +9,8 @@ import java.util.LinkedList;
  * @author otuboyas
  *
  */
-public class DESTerminater extends DESObject {
+public class DESTerminater extends DESActivity {
 
-	private DESTerminater outNode;
 	private LinkedList<DESEvent> queue;
 
 	private long workingTime;
@@ -31,24 +30,11 @@ public class DESTerminater extends DESObject {
 	}
 
 	/**
-	 * @return outNode
-	 */
-	public DESTerminater getOutNode() {
-		return outNode;
-	}
-
-	/**
-	 * @param outNode セットする outNode
-	 */
-	public void setOutNode(DESTerminater outNode) {
-		this.outNode = outNode;
-	}
-
-	/**
 	 *
 	 * @param past
 	 */
-	private void doAction(long past) {
+	@Override
+	public void action(long past) {
 		//
 		// 時計を進める
 		long now = past + this.workingTime;
@@ -70,20 +56,11 @@ public class DESTerminater extends DESObject {
 				//
 				// 送るイベントを待ち行列から削除する
 				this.queue.pollFirst();
-				//
-				// イベントを次のアクティビティへ送る
-				if (this.outNode != null) {
-					//
-					// 送達時間を設定する
-					event.setDepartureTime(now);
-					//
-					// イベントを次のアクティビティへ送る
-					this.outNode.setEvent(event);
-				}
 			}
 		}
 	}
 
+	@Override
 	public void setEvent(DESEvent event) {
 		long now = this.getTime();
 		//
@@ -94,12 +71,13 @@ public class DESTerminater extends DESObject {
 		}
 		//
 		// イベント処理を行う
-		this.doAction(now);
+		// this.doAction(now);
 	}
 
 	/**
 	 * @return workingTime
 	 */
+	@Override
 	public long getWorkingTime() {
 		return workingTime;
 	}
@@ -107,6 +85,7 @@ public class DESTerminater extends DESObject {
 	/**
 	 * @param workingTime セットする workingTime
 	 */
+	@Override
 	public void setWorkingTime(long workingTime) {
 		this.workingTime = workingTime;
 	}
@@ -114,6 +93,7 @@ public class DESTerminater extends DESObject {
 	/**
 	 * @return redundantType
 	 */
+	@Override
 	public long getRedundantType() {
 		return redundantType;
 	}
@@ -121,6 +101,7 @@ public class DESTerminater extends DESObject {
 	/**
 	 * @param redundantType セットする redundantType
 	 */
+	@Override
 	public void setRedundantType(long redundantType) {
 		this.redundantType = redundantType;
 	}
@@ -128,6 +109,7 @@ public class DESTerminater extends DESObject {
 	/**
 	 * @return redundantNumber
 	 */
+	@Override
 	public long getRedundantNumber() {
 		return redundantNumber;
 	}
@@ -135,6 +117,7 @@ public class DESTerminater extends DESObject {
 	/**
 	 * @param redundantNumber セットする redundantNumber
 	 */
+	@Override
 	public void setRedundantNumber(long redundantNumber) {
 		this.redundantNumber = redundantNumber;
 	}

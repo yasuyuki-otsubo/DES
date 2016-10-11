@@ -5,6 +5,8 @@ package com.fishbonelab.desengine;
 
 import java.util.LinkedList;
 
+import com.fishbonelab.desengine.utils.Log;
+
 /**
  * @author otuboyas
  *
@@ -48,7 +50,7 @@ public class DESActivity extends DESObject {
 	 *
 	 * @param past
 	 */
-	private void doAction(long past) {
+	public void action(long past) {
 		//
 		// 時計を進める
 		long now = past + this.workingTime;
@@ -66,7 +68,9 @@ public class DESActivity extends DESObject {
 				//
 				// 処理開始時間と終了時間を設定する
 				event.setProcessStartTime(past);
+				Log.processStart(event, this);
 				event.setProcessEndTime(now);
+				Log.processEnd(event, this);
 				//
 				// 送るイベントを待ち行列から削除する
 				this.queue.pollFirst();
@@ -76,6 +80,7 @@ public class DESActivity extends DESObject {
 					//
 					// 送達時間を設定する
 					event.setDepartureTime(now);
+					Log.departure(event, this);
 					//
 					// イベントを次のアクティビティへ送る
 					this.outNode.setEvent(event);
@@ -90,11 +95,17 @@ public class DESActivity extends DESObject {
 		// イベントを待ち行列に入れる
 		if (event != null) {
 			event.setArrivalTime(now);
+			Log.arrival(event, this);
 			this.queue.add(event);
 		}
-		//
+		// FIXME: このようにすると、処理が一向に終わらなくなる。
+		// FIXME: 代替として、マネージャにて実行処理を制御する
 		// イベント処理を行う
-		this.doAction(now);
+		// this.doAction(now);
+	}
+
+	public boolean isEmpty() {
+		return this.queue.isEmpty();
 	}
 
 	/**
