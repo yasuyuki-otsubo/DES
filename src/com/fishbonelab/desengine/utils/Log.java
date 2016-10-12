@@ -14,8 +14,8 @@ import com.fishbonelab.desengine.DESTerminater;
  */
 public class Log {
 
-	public enum ENUM_EVENTS {
-		EVENT_ARRIVAL, EVENT_PROC_START, EVENT_PROC_END, EVENT_DEPARTURE, EVENT_START, EVENT_END
+	private enum ENUM_EVENTS {
+		EVENT_ARRIVAL, EVENT_START, EVENT_END, EVENT_DEPARTURE, EVENT_CREATE, EVENT_FINISH
 	};
 
 	/**
@@ -24,11 +24,20 @@ public class Log {
 	public Log() {
 	}
 
+	/**
+	 * ログヘッダを出力する
+	 */
 	public static void header() {
 		String title = "event_id, action, time, pid, memo";
 		System.out.println(title);
 	}
 
+	/**
+	 * イベントタイプに応じたログを出力する
+	 * @param etype イベントタイプ
+	 * @param event イベントオブジェクト
+	 * @param activity アクティビティ・オブジェクト
+	 */
 	protected static void out(ENUM_EVENTS etype, DESEvent event, DESActivity activity) {
 		StringBuffer buf = new StringBuffer();
 		//
@@ -36,27 +45,27 @@ public class Log {
 		buf.append(event.getId());
 		switch (etype) {
 			case EVENT_ARRIVAL:
-				buf.append(",a,");
+				buf.append(",arrived,");
 				buf.append(event.getArrivalTime());
 				break;
-			case EVENT_PROC_START:
-				buf.append(",s,");
+			case EVENT_START:
+				buf.append(",started,");
 				buf.append(event.getProcessStartTime());
 				break;
-			case EVENT_PROC_END:
-				buf.append(",e,");
+			case EVENT_END:
+				buf.append(",end,");
 				buf.append(event.getProcessEndTime());
 				break;
 			case EVENT_DEPARTURE:
-				buf.append(",d,");
+				buf.append(",departured,");
 				buf.append(event.getDepartureTime());
 				break;
-			case EVENT_START:
-				buf.append(",b,");
+			case EVENT_CREATE:
+				buf.append(",created,");
 				buf.append(event.getStartTime());
 				break;
-			case EVENT_END:
-				buf.append(",f,");
+			case EVENT_FINISH:
+				buf.append(",finished,");
 				buf.append(event.getTime());
 				break;
 			default:
@@ -74,6 +83,11 @@ public class Log {
 		System.out.println(buf.toString());
 	}
 
+	/**
+	 * イベントオブジェクト用のログを出力する
+	 * @param etype イベントタイプ
+	 * @param event イベントオブジェクト
+	 */
 	protected static void out2(ENUM_EVENTS etype, DESEvent event) {
 		String msg = "";
 		StringBuffer buf = new StringBuffer();
@@ -86,12 +100,12 @@ public class Log {
 				buf.append(event.getArrivalTime());
 				msg = "";
 				break;
-			case EVENT_PROC_START:
+			case EVENT_START:
 				buf.append(",s,");
 				buf.append(event.getProcessStartTime());
 				msg = "";
 				break;
-			case EVENT_PROC_END:
+			case EVENT_END:
 				buf.append(",e,");
 				buf.append(event.getProcessEndTime());
 				msg = "";
@@ -101,12 +115,12 @@ public class Log {
 				buf.append(event.getDepartureTime());
 				msg = "";
 				break;
-			case EVENT_START:
+			case EVENT_CREATE:
 				buf.append(",b,");
 				buf.append(event.getStartTime());
 				msg = "開始";
 				break;
-			case EVENT_END:
+			case EVENT_FINISH:
 				buf.append(",f,");
 				buf.append(event.getTime());
 				msg = "完了";
@@ -123,26 +137,56 @@ public class Log {
 		System.out.println(buf.toString());
 	}
 
-	public static void start(DESEvent event, DESGenerator generator) {
-		out(Log.ENUM_EVENTS.EVENT_START, event, generator);
+	/**
+	 * 
+	 * @param event
+	 * @param generator
+	 */
+	public static void create(DESEvent event, DESGenerator generator) {
+		out(Log.ENUM_EVENTS.EVENT_CREATE, event, generator);
 	};
 
-	public static void end(DESEvent event, DESTerminater terminater) {
-		out(Log.ENUM_EVENTS.EVENT_END, event, terminater);
+	/**
+	 * 
+	 * @param event
+	 * @param terminater
+	 */
+	public static void finish(DESEvent event, DESTerminater terminater) {
+		out(Log.ENUM_EVENTS.EVENT_FINISH, event, terminater);
 	};
 
+	/**
+	 * 
+	 * @param event
+	 * @param activity
+	 */
 	public static void arrival(DESEvent event, DESActivity activity) {
 		out(Log.ENUM_EVENTS.EVENT_ARRIVAL, event, activity);
 	};
 
-	public static void processStart(DESEvent event, DESActivity activity) {
-		out(Log.ENUM_EVENTS.EVENT_PROC_START, event, activity);
+	/**
+	 * 
+	 * @param event
+	 * @param activity
+	 */
+	public static void start(DESEvent event, DESActivity activity) {
+		out(Log.ENUM_EVENTS.EVENT_START, event, activity);
 	};
 
-	public static void processEnd(DESEvent event, DESActivity activity) {
-		out(Log.ENUM_EVENTS.EVENT_PROC_END, event, activity);
+	/**
+	 * 
+	 * @param event
+	 * @param activity
+	 */
+	public static void end(DESEvent event, DESActivity activity) {
+		out(Log.ENUM_EVENTS.EVENT_END, event, activity);
 	};
 
+	/**
+	 * 
+	 * @param event
+	 * @param activity
+	 */
 	public static void departure(DESEvent event, DESActivity activity) {
 		out(Log.ENUM_EVENTS.EVENT_DEPARTURE, event, activity);
 	};

@@ -17,6 +17,7 @@ public class DESActivity extends DESObject {
 	private LinkedList<DESEvent> queue;
 
 	private long workingTime;
+	private long workStartTime;
 	private long redundantType;
 	private long redundantNumber;
 
@@ -28,6 +29,7 @@ public class DESActivity extends DESObject {
 		queue = new LinkedList<DESEvent>();
 		//
 		workingTime = 1; /// < 処理時間は、通常1以上の値を設定する。単位は、ミリ秒
+		workStartTime = 0;
 		setRedundantType(0); /// < 現状では、均等分散のみ
 		setRedundantNumber(1); /// < 並列計数は1以上の値を設定する
 	}
@@ -47,13 +49,20 @@ public class DESActivity extends DESObject {
 	}
 
 	/**
-	 *
-	 * @param past
+	 * 実行エンジンによりタイムスケール間隔で呼び出される。
+	 * @param past 実行エンジン内の現在時間を渡される。
 	 */
 	public void action(long past) {
 		//
+		// 作業開始時間を判定する
+		// タイムスケール間隔で実行されるが、アクティビティは処理完了直後に次のイベント処理を行う
+		// そのため、処理開始時間を修正する
+		if (workStartTime<past) {
+			workStartTime=past;
+		}
+		//
 		// 時計を進める
-		long now = past + this.workingTime;
+		long now = workStartTime + this.workingTime;
 		// long now = past;
 		this.setTime(now);
 		//
@@ -68,11 +77,11 @@ public class DESActivity extends DESObject {
 			if (event.getArrivalTime() <= now) {
 				//
 				// 処理開始時間と終了時間を設定する
-				event.setProcessStartTime(past);
-				Log.processStart(event, this);
+				event.setProcessStartTime(workStartTime);
+				Log.start(event, this);
 				event.setProcessEndTime(now);
 				event.setTime(now);
-				Log.processEnd(event, this);
+				Log.end(event, this);
 				//
 				// 送るイベントを待ち行列から削除する
 				this.queue.pollFirst();
@@ -82,6 +91,7 @@ public class DESActivity extends DESObject {
 					//
 					// 送達時間を設定する
 					event.setDepartureTime(now);
+					this.workStartTime=now;
 					Log.departure(event, this);
 					//
 					// イベントを次のアクティビティへ送る

@@ -38,19 +38,20 @@ public class TestSimple1 {
 		/// < ノードを定義する
 		generator.setId(1);
 		generator.setName("開始");
-		generator.setTime(0);
-		generator.setStartTime(0);
-		generator.setEndTime(20);
-		generator.setDuration(10);
+		//generator.setTime(0);
+		generator.setStartTime(0); // 開始時間：　０ 
+		generator.setEndTime(20);  // 終了時間：２０
+		generator.setDuration(10); // イベント発生間隔：１０
 		//
 		activity1.setId(2);
 		activity1.setName("処理する");
-		activity1.setWorkingTime(11);
+		activity1.setWorkingTime(5); // 処理時間：５；ここをDurationより大きい数値にすると待ち行列が発生する
 		//
 		terminater.setId(3);
 		terminater.setName("完了");
 
 		/// < ノード間を接続する ( set network among nodes.)
+		/// generator => activity1 => terminator
 		generator.setOutNode(activity1);
 		activity1.setOutNode(terminater);
 
@@ -60,8 +61,7 @@ public class TestSimple1 {
 		manager.setGenerator(generator);
 		//
 		/// 実行する
-		Log.header();
+		Log.header(); ///< ログの見出しを出力する
 		manager.simulate();
 	}
-
 }

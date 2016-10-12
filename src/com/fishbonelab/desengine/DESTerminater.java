@@ -60,7 +60,7 @@ public class DESTerminater extends DESActivity {
 				this.queue.pollFirst();
 				//
 				//
-				Log.end(event, this);
+				Log.finish(event, this);
 			}
 		}
 	}

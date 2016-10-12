@@ -107,7 +107,7 @@ public class DESGenerator extends DESActivity {
 			event.setName("customer " + String.valueOf(id));
 			//
 			event.setTime(now);
-			Log.start(event, this);
+			Log.create(event, this);
 			this.outNode.setEvent(event);
 			//
 			id++;
