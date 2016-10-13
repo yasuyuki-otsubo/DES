@@ -132,7 +132,7 @@ public class DESEvent extends DESObject {
 		if (waittingTime < 0) {
 			waittingTime = 0;
 		}
-		System.out.println(this.getId() + ":" + waittingTime);
+		// System.out.println(this.getId() + ":" + waittingTime);
 		return waittingTime;
 	}
 

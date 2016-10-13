@@ -140,6 +140,7 @@ public class DESTaskManager {
 	public void showStatistics() {
 		//
 		// 1)基本
+		// ・アクティビティ数
 		// ・イベント数
 		// ・イベント発生間隔
 		// ・アルゴリズム(一定、ランダム、式)
@@ -150,16 +151,20 @@ public class DESTaskManager {
 		// ・イベント毎の平均待ち時間
 		// ・アクティビティ毎の平均待ち時間
 
-		System.out.println("イベント数　　　 　　　　　　　: " + generator.getEventCount());
-		System.out.println("イベント発生間隔 　　　　　　　: " + generator.getDuration());
-		System.out.println("発生アルゴリズム 　　　　　　　: " + generator.getAlgorithmName());
+		System.out.println("==================================================");
+		System.out.println("= 　　　　　　　　　統計情報 　　　　　　　　　　=");
+		System.out.println("==================================================");
+		System.out.println(" 1)アクティビティ数　　　 　　　　: " + (this.list.size() - 1));
+		System.out.println(" 2)イベント数　　　 　　　　　　　: " + generator.getEventCount());
+		System.out.println(" 3)イベント発生間隔 　　　　　　　: " + generator.getDuration());
+		System.out.println(" 4)発生アルゴリズム 　　　　　　　: " + generator.getAlgorithmName());
 		//
 		this.getMaxCountOfQueue();
 		double average_event = this.getTerminater().getTotalWaitingTime() / generator.getEventCount();
 		double average_act = average_event / (this.list.size() - 1);
-		System.out.println("最大待ち行列数　　　　　　　　 : " + maxQueueCount);
-		System.out.println("発生個所　　　　　　　　　　　 : ID" + maxQueueId);
-		System.out.println("イベント毎の平均待ち時間　　　 : " + average_event);
-		System.out.println("アクティビティ毎の平均待ち時間 : " + average_act);
+		System.out.println(" 5)最大待ち行列数　　　　　　　　 : " + maxQueueCount);
+		System.out.println(" 6)発生個所　　　　　　　　　　　 : ID" + maxQueueId);
+		System.out.println(" 7)イベント毎の平均待ち時間　　　 : " + average_event);
+		System.out.println(" 8)アクティビティ毎の平均待ち時間 : " + average_act);
 	}
 }
