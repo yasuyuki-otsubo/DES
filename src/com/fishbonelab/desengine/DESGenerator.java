@@ -3,8 +3,6 @@
  */
 package com.fishbonelab.desengine;
 
-import java.util.LinkedList;
-
 import com.fishbonelab.desengine.utils.Log;
 
 /**
@@ -13,12 +11,15 @@ import com.fishbonelab.desengine.utils.Log;
  */
 public class DESGenerator extends DESActivity {
 
-	private DESActivity outNode;
-	private LinkedList<DESEvent> queue;
+	private long eventCount;
+	private String algorithmName;
 
-	private long workingTime;
-	private long redundantType;
-	private long redundantNumber;
+	// private DESActivity outNode;
+	// private LinkedList<DESEvent> queue;
+
+	// private long workingTime;
+	// private long redundantType;
+	// private long redundantNumber;
 
 	private long startTime;
 	private long endTime;
@@ -28,52 +29,13 @@ public class DESGenerator extends DESActivity {
 	 *
 	 */
 	public DESGenerator() {
-		outNode = null;
-		queue = new LinkedList<DESEvent>();
+		super();
 		//
-		workingTime = 1; /// < 処理時間は、通常1以上の値を設定する。単位は、ミリ秒
-		setRedundantType(0); /// < 現状では、均等分散のみ
-		setRedundantNumber(1); /// < 並列計数は1以上の値を設定する
-	}
-
-	/**
-	 *
-	 * @param past
-	 */
-	private void doAction(long past) {
-		//
-		// 時計を進める
-		long now = past + this.workingTime;
-		this.setTime(now);
-		//
-		// redundant している個数分イベント処理を行う
-		for (int ii = 0; ii < this.redundantNumber; ii++) {
-			//
-			DESEvent event = this.queue.peekFirst();
-			if (event == null) {
-				break;
-			}
-			//
-			if (event.getArrivalTime() <= now) {
-				//
-				// 処理開始時間と終了時間を設定する
-				event.setProcessStartTime(past);
-				event.setProcessEndTime(now);
-				//
-				// 送るイベントを待ち行列から削除する
-				this.queue.pollFirst();
-				//
-				// イベントを次のアクティビティへ送る
-				if (this.outNode != null) {
-					//
-					// 送達時間を設定する
-					event.setDepartureTime(now);
-					//
-					// イベントを次のアクティビティへ送る
-					this.outNode.setEvent(event);
-				}
-			}
-		}
+		eventCount = 0;
+		algorithmName = "";
+		startTime = 0;
+		endTime = 0;
+		duration = 0;
 	}
 
 	public void generate() throws Exception {
@@ -112,70 +74,54 @@ public class DESGenerator extends DESActivity {
 			//
 			id++;
 		}
-
-	}
-
-	@Override
-	public void setEvent(DESEvent event) {
-		long now = this.getTime();
 		//
-		// イベントを待ち行列に入れる
-		if (event != null) {
-			event.setArrivalTime(now);
-			this.queue.add(event);
-		}
-		//
-		// イベント処理を行う
-		this.doAction(now);
+		eventCount = --id;
 	}
 
-	/**
-	 * @return workingTime
-	 */
-	@Override
-	public long getWorkingTime() {
-		return workingTime;
-	}
-
-	/**
-	 * @param workingTime セットする workingTime
-	 */
-	@Override
-	public void setWorkingTime(long workingTime) {
-		this.workingTime = workingTime;
-	}
-
-	/**
-	 * @return redundantType
-	 */
-	@Override
-	public long getRedundantType() {
-		return redundantType;
-	}
-
-	/**
-	 * @param redundantType セットする redundantType
-	 */
-	@Override
-	public void setRedundantType(long redundantType) {
-		this.redundantType = redundantType;
-	}
-
-	/**
-	 * @return redundantNumber
-	 */
-	@Override
-	public long getRedundantNumber() {
-		return redundantNumber;
-	}
-
-	/**
-	 * @param redundantNumber セットする redundantNumber
-	 */
-	@Override
-	public void setRedundantNumber(long redundantNumber) {
-		this.redundantNumber = redundantNumber;
-	}
+	/*
+	 * @Override public void setEvent(DESEvent event) { long now =
+	 * this.getTime(); // // イベントを待ち行列に入れる if (event != null) {
+	 * event.setArrivalTime(now); this.queue.add(event); } // // イベント処理を行う
+	 * this.doAction(now); }
+	 *
+	 *//**
+		* @return workingTime
+		*/
+	/*
+	 * @Override public long getWorkingTime() { return workingTime; }
+	 *
+	 *//**
+		* @param workingTime セットする workingTime
+		*/
+	/*
+	 * @Override public void setWorkingTime(long workingTime) { this.workingTime
+	 * = workingTime; }
+	 *
+	 *//**
+		* @return redundantType
+		*/
+	/*
+	 * @Override public long getRedundantType() { return redundantType; }
+	 *
+	 *//**
+		* @param redundantType セットする redundantType
+		*/
+	/*
+	 * @Override public void setRedundantType(long redundantType) {
+	 * this.redundantType = redundantType; }
+	 *
+	 *//**
+		* @return redundantNumber
+		*/
+	/*
+	 * @Override public long getRedundantNumber() { return redundantNumber; }
+	 *
+	 *//**
+		* @param redundantNumber セットする redundantNumber
+		*//*
+		 * @Override public void setRedundantNumber(long redundantNumber) {
+		 * this.redundantNumber = redundantNumber; }
+		 */
 
 	/**
 	 * @return startTime
@@ -233,5 +179,26 @@ public class DESGenerator extends DESActivity {
 	@Override
 	public void setOutNode(DESActivity outNode) {
 		this.outNode = outNode;
+	}
+
+	/**
+	 * @return eventCount
+	 */
+	public long getEventCount() {
+		return eventCount;
+	}
+
+	/**
+	 * @return algorithmName
+	 */
+	public String getAlgorithmName() {
+		return algorithmName;
+	}
+
+	/**
+	 * @param algorithmName セットする algorithmName
+	 */
+	public void setAlgorithmName(String algorithmName) {
+		this.algorithmName = algorithmName;
 	}
 }

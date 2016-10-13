@@ -3,8 +3,6 @@
  */
 package com.fishbonelab.desengine;
 
-import java.util.LinkedList;
-
 import com.fishbonelab.desengine.utils.Log;
 
 /**
@@ -13,22 +11,15 @@ import com.fishbonelab.desengine.utils.Log;
  */
 public class DESTerminater extends DESActivity {
 
-	private LinkedList<DESEvent> queue;
-
-	private long workingTime;
-	private long redundantType;
-	private long redundantNumber;
+	private long totalWaitingTime = 0;
 
 	/**
 	 *
 	 */
 	public DESTerminater() {
-		setOutNode(null);
-		queue = new LinkedList<DESEvent>();
+		super();
 		//
-		workingTime = 1; /// < 処理時間は、通常1以上の値を設定する。単位は、ミリ秒
-		setRedundantType(0); /// < 現状では、均等分散のみ
-		setRedundantNumber(1); /// < 並列計数は1以上の値を設定する
+		totalWaitingTime = 0;
 	}
 
 	/**
@@ -39,29 +30,22 @@ public class DESTerminater extends DESActivity {
 	public void action(long past) {
 		//
 		// 時計を進める
-		long now = past + this.workingTime;
-		this.setTime(now);
+		// long now = past + this.workingTime;
+		// this.setTime(now);
 		//
-		// redundant している個数分イベント処理を行う
-		for (int ii = 0; ii < this.redundantNumber; ii++) {
+		for (DESEvent event : this.queue) {
 			//
-			DESEvent event = this.queue.peekFirst();
-			if (event == null) {
-				break;
-			}
+			// 処理開始時間と終了時間を設定する
+			// event.setProcessStartTime(past);
+			event.setProcessEndTime(past);
 			//
-			if (event.getArrivalTime() <= now) {
-				//
-				// 処理開始時間と終了時間を設定する
-				event.setProcessStartTime(past);
-				event.setProcessEndTime(now);
-				//
-				// 送るイベントを待ち行列から削除する
-				this.queue.pollFirst();
-				//
-				//
-				Log.finish(event, this);
-			}
+			totalWaitingTime += event.getWaittingTime();
+			//
+			// 送るイベントを待ち行列から削除する
+			this.queue.pollFirst();
+			//
+			//
+			Log.finish(event, this);
 		}
 	}
 
@@ -80,50 +64,16 @@ public class DESTerminater extends DESActivity {
 	}
 
 	/**
-	 * @return workingTime
+	 * @return totalWaitingTime
 	 */
-	@Override
-	public long getWorkingTime() {
-		return workingTime;
+	public double getTotalWaitingTime() {
+		return totalWaitingTime;
 	}
 
 	/**
-	 * @param workingTime セットする workingTime
+	 * @param totalWaitingTime セットする totalWaitingTime
 	 */
-	@Override
-	public void setWorkingTime(long workingTime) {
-		this.workingTime = workingTime;
-	}
-
-	/**
-	 * @return redundantType
-	 */
-	@Override
-	public long getRedundantType() {
-		return redundantType;
-	}
-
-	/**
-	 * @param redundantType セットする redundantType
-	 */
-	@Override
-	public void setRedundantType(long redundantType) {
-		this.redundantType = redundantType;
-	}
-
-	/**
-	 * @return redundantNumber
-	 */
-	@Override
-	public long getRedundantNumber() {
-		return redundantNumber;
-	}
-
-	/**
-	 * @param redundantNumber セットする redundantNumber
-	 */
-	@Override
-	public void setRedundantNumber(long redundantNumber) {
-		this.redundantNumber = redundantNumber;
-	}
+	// private void setTotalWaitingTime(long totalWaitingTime) {
+	// this.totalWaitingTime = totalWaitingTime;
+	// }
 }

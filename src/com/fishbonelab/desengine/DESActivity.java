@@ -13,8 +13,16 @@ import com.fishbonelab.desengine.utils.Log;
  */
 public class DESActivity extends DESObject {
 
-	private DESActivity outNode;
-	private LinkedList<DESEvent> queue;
+	protected DESActivity outNode;
+	protected LinkedList<DESEvent> queue;
+	private int maxQueueCount;
+
+	/**
+	 * @return maxQueueCount
+	 */
+	public int getMaxQueueCount() {
+		return maxQueueCount;
+	}
 
 	private long workingTime;
 	private long workStartTime;
@@ -27,6 +35,7 @@ public class DESActivity extends DESObject {
 	public DESActivity() {
 		setOutNode(null);
 		queue = new LinkedList<DESEvent>();
+		maxQueueCount = 0;
 		//
 		workingTime = 1; /// < 処理時間は、通常1以上の値を設定する。単位は、ミリ秒
 		workStartTime = 0;
@@ -57,8 +66,8 @@ public class DESActivity extends DESObject {
 		// 作業開始時間を判定する
 		// タイムスケール間隔で実行されるが、アクティビティは処理完了直後に次のイベント処理を行う
 		// そのため、処理開始時間を修正する
-		if (workStartTime<past) {
-			workStartTime=past;
+		if (workStartTime < past) {
+			workStartTime = past;
 		}
 		//
 		// 時計を進める
@@ -91,7 +100,7 @@ public class DESActivity extends DESObject {
 					//
 					// 送達時間を設定する
 					event.setDepartureTime(now);
-					this.workStartTime=now;
+					this.workStartTime = now;
 					Log.departure(event, this);
 					//
 					// イベントを次のアクティビティへ送る
@@ -101,6 +110,11 @@ public class DESActivity extends DESObject {
 		}
 	}
 
+	/**
+	 * イベントをActivityに設定する。
+	 * Activityが作業中の場合は、Activityの待ち行列に入れる。
+	 * @param event
+	 */
 	public void setEvent(DESEvent event) {
 		long now = this.getTime();
 		//
@@ -113,6 +127,12 @@ public class DESActivity extends DESObject {
 			event.setArrivalTime(now);
 			Log.arrival(event, this);
 			this.queue.add(event);
+			// System.out.println(this.queue.size());
+			//
+			// FIXME: これだと正しい待ち行列数を示さない
+			if (maxQueueCount < this.queue.size()) {
+				maxQueueCount = this.queue.size();
+			}
 		}
 		// FIXME: このようにすると、処理が一向に終わらなくなる。
 		// FIXME: 代替として、マネージャにて実行処理を制御する

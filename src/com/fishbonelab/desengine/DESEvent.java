@@ -20,7 +20,7 @@ public class DESEvent extends DESObject {
 
 	// Calcurated
 	private long waittingTime = -1;
-	private long processingTime = -1;
+	// private long processingTime = -1;
 
 	/**
 	 *
@@ -91,7 +91,7 @@ public class DESEvent extends DESObject {
 		this.processStartTime = processStartTime;
 		//
 		// 待ち時間の計算
-		this.waittingTime = this.arrivalTime - this.processStartTime;
+		this.setWaittingTime(this.processStartTime - this.arrivalTime);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class DESEvent extends DESObject {
 		this.processEndTime = processEndTime;
 		//
 		// 処理時間の計算
-		this.processingTime = this.processEndTime - this.processStartTime;
+		// this.processingTime = this.processEndTime - this.processStartTime;
 	}
 
 	/**
@@ -123,6 +123,25 @@ public class DESEvent extends DESObject {
 	 */
 	public void setDepartureTime(long departureTime) {
 		this.departureTime = departureTime;
+	}
+
+	/**
+	 * @return waittingTime
+	 */
+	public long getWaittingTime() {
+		if (waittingTime < 0) {
+			waittingTime = 0;
+		}
+		System.out.println(this.getId() + ":" + waittingTime);
+		return waittingTime;
+	}
+
+	/**
+	 * @param waittingTime セットする waittingTime
+	 */
+	private void setWaittingTime(long waittingTime) {
+		this.waittingTime += waittingTime;
+		// System.out.println(waittingTime + "-" + waittingTime);
 	}
 
 }

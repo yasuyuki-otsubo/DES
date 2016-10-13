@@ -13,6 +13,9 @@ public class DESTaskManager {
 
 	private ArrayList<DESActivity> list;
 	private DESGenerator generator;
+	//
+	private long maxQueueId = 0;
+	private long maxQueueCount = 0;
 
 	/**
 	 *
@@ -81,7 +84,7 @@ public class DESTaskManager {
 				//
 				this.generator.generate();
 				//
-				// 設定された期間を実行する
+				// 全てのActivityにてエベントが無くなるまで実行する
 				while (!this.isFinished()) {
 					this.doOneStep(now);
 					now += step;
@@ -90,5 +93,73 @@ public class DESTaskManager {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private void getMaxCountOfQueue() {
+		long max = 0;
+		long id = 0;
+
+		for (DESActivity activity : this.list) {
+			if (max < activity.getMaxQueueCount()) {
+				max = activity.getMaxQueueCount();
+				id = activity.getId();
+				// System.out.println(id + "-" + max);
+			}
+		}
+		//
+		maxQueueCount = max;
+		maxQueueId = id;
+	}
+
+	private DESTerminater getTerminater() {
+		DESTerminater term = null;
+
+		for (DESActivity act : this.list) {
+			if (act instanceof DESTerminater) {
+				term = (DESTerminater) act;
+				break;
+			}
+		}
+
+		return term;
+	}
+
+	/**
+	 *
+	 * 1)基本
+	 * ・イベント数
+	 * ・イベント発生間隔
+	 * ・アルゴリズム(一定、ランダム、式)
+	 * 2)最大待ち行列イベント
+	 * ・発生個所(Activity)
+	 * ・待ち行列数
+	 * 3)平均待ち時間
+	 * ・イベント毎の平均待ち時間
+	 * ・アクティビティ毎の平均待ち時間
+	 */
+	public void showStatistics() {
+		//
+		// 1)基本
+		// ・イベント数
+		// ・イベント発生間隔
+		// ・アルゴリズム(一定、ランダム、式)
+		// 2)最大待ち行列イベント
+		// ・発生個所(Activity)
+		// ・待ち行列数
+		// 3)平均待ち時間
+		// ・イベント毎の平均待ち時間
+		// ・アクティビティ毎の平均待ち時間
+
+		System.out.println("イベント数　　　 　　　　　　　: " + generator.getEventCount());
+		System.out.println("イベント発生間隔 　　　　　　　: " + generator.getDuration());
+		System.out.println("発生アルゴリズム 　　　　　　　: " + generator.getAlgorithmName());
+		//
+		this.getMaxCountOfQueue();
+		double average_event = this.getTerminater().getTotalWaitingTime() / generator.getEventCount();
+		double average_act = average_event / (this.list.size() - 1);
+		System.out.println("最大待ち行列数　　　　　　　　 : " + maxQueueCount);
+		System.out.println("発生個所　　　　　　　　　　　 : ID" + maxQueueId);
+		System.out.println("イベント毎の平均待ち時間　　　 : " + average_event);
+		System.out.println("アクティビティ毎の平均待ち時間 : " + average_act);
 	}
 }
