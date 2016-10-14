@@ -14,13 +14,6 @@ public class DESGenerator extends DESActivity {
 	private long eventCount;
 	private String algorithmName;
 
-	// private DESActivity outNode;
-	// private LinkedList<DESEvent> queue;
-
-	// private long workingTime;
-	// private long redundantType;
-	// private long redundantNumber;
-
 	private long startTime;
 	private long endTime;
 	private long duration;
@@ -62,66 +55,54 @@ public class DESGenerator extends DESActivity {
 			throw new Exception();
 		}
 		//
-		int id = 1;
+		int id = 0;
 		for (long now = startTime; now < endTime; now += duration) {
+			/// idを更新する
+			id++;
+			/// イベントを作成する
 			DESEvent event = new DESEvent();
 			event.setId(id);
 			event.setName("customer " + String.valueOf(id));
 			//
 			event.setTime(now);
-			Log.create(event, this);
-			this.outNode.setEvent(event);
 			//
-			id++;
+			// イベントの発生時刻を記録する
+			event.setStartTime(now);
+			Log.create(event, this);
+			//
+			// 待ち時間を正しく計算できるように、直接Activityへ送らずに
+			// 一旦自信のキューに保存し、タスクマネージャの制御にて
+			// Activityへイベントを送るように変更した
+			// this.outNode.setEvent(event);
+			this.queue.add(event);
 		}
-		//
-		eventCount = --id;
+		// 最後に作成したイベントIDを総作成個数として保存する
+		eventCount = id;
 	}
 
 	/*
-	 * @Override public void setEvent(DESEvent event) { long now =
-	 * this.getTime(); // // イベントを待ち行列に入れる if (event != null) {
-	 * event.setArrivalTime(now); this.queue.add(event); } // // イベント処理を行う
-	 * this.doAction(now); }
+	 * (非 Javadoc)
 	 *
-	 *//**
-		* @return workingTime
-		*/
-	/*
-	 * @Override public long getWorkingTime() { return workingTime; }
-	 *
-	 *//**
-		* @param workingTime セットする workingTime
-		*/
-	/*
-	 * @Override public void setWorkingTime(long workingTime) { this.workingTime
-	 * = workingTime; }
-	 *
-	 *//**
-		* @return redundantType
-		*/
-	/*
-	 * @Override public long getRedundantType() { return redundantType; }
-	 *
-	 *//**
-		* @param redundantType セットする redundantType
-		*/
-	/*
-	 * @Override public void setRedundantType(long redundantType) {
-	 * this.redundantType = redundantType; }
-	 *
-	 *//**
-		* @return redundantNumber
-		*/
-	/*
-	 * @Override public long getRedundantNumber() { return redundantNumber; }
-	 *
-	 *//**
-		* @param redundantNumber セットする redundantNumber
-		*//*
-		 * @Override public void setRedundantNumber(long redundantNumber) {
-		 * this.redundantNumber = redundantNumber; }
-		 */
+	 * @see com.fishbonelab.desengine.DESActivity#action(long)
+	 */
+	@Override
+	public void action(long past) {
+		while (true) {
+			//
+			// エラー防止のため、キューを先読みする
+			DESEvent event = this.queue.peekFirst();
+			if (event == null) {
+				break;
+			}
+			// 安全にキューからイベントを取得する
+			event = this.queue.pollFirst();
+			if (past > event.getStartTime()) {
+				//
+				// イベントをアクティビティへ送る
+				this.getOutNode().setEvent(event);
+			}
+		}
+	}
 
 	/**
 	 * @return startTime

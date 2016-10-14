@@ -67,6 +67,7 @@ public class DESTaskManager {
 	 * @param generator セットする generator
 	 */
 	public void setGenerator(DESGenerator generator) {
+		this.list.add(generator);
 		this.generator = generator;
 	}
 
@@ -154,16 +155,22 @@ public class DESTaskManager {
 		System.out.println("==================================================");
 		System.out.println("= 　　　　　　　　　統計情報 　　　　　　　　　　=");
 		System.out.println("==================================================");
-		System.out.println(" 1)アクティビティ数　　　 　　　　: " + (this.list.size() - 1));
+		System.out.println(" 1)アクティビティ数　　　 　　　　: " + (this.list.size() - 2));
 		System.out.println(" 2)イベント数　　　 　　　　　　　: " + generator.getEventCount());
 		System.out.println(" 3)イベント発生間隔 　　　　　　　: " + generator.getDuration());
 		System.out.println(" 4)発生アルゴリズム 　　　　　　　: " + generator.getAlgorithmName());
 		//
 		this.getMaxCountOfQueue();
 		double average_event = this.getTerminater().getTotalWaitingTime() / generator.getEventCount();
-		double average_act = average_event / (this.list.size() - 1);
+		double average_act = average_event / (this.list.size() - 2);
 		System.out.println(" 5)最大待ち行列数　　　　　　　　 : " + maxQueueCount);
-		System.out.println(" 6)発生個所　　　　　　　　　　　 : ID" + maxQueueId);
+		String nodeName;
+		if (maxQueueId == 0) {
+			nodeName = "There is not any queue.";
+		} else {
+			nodeName = "ID-" + String.valueOf(maxQueueId);
+		}
+		System.out.println(" 6)発生個所　　　　　　　　　　　 : " + nodeName);
 		System.out.println(" 7)イベント毎の平均待ち時間　　　 : " + average_event);
 		System.out.println(" 8)アクティビティ毎の平均待ち時間 : " + average_act);
 	}

@@ -46,7 +46,7 @@ public class TestSimple1 {
 		//
 		activity1.setId(2);
 		activity1.setName("処理する");
-		activity1.setWorkingTime(20); // 処理時間：５；ここをDurationより大きい数値にすると待ち行列が発生する
+		activity1.setWorkingTime(9); // 処理時間：５；ここをDurationより大きい数値にすると待ち行列が発生する
 		//
 		terminater.setId(3);
 		terminater.setName("完了");
@@ -57,9 +57,9 @@ public class TestSimple1 {
 		activity1.setOutNode(terminater);
 
 		/// タスクマネージャにノードを登録する
+		manager.setGenerator(generator);
 		manager.addActivity(activity1);
 		manager.addActivity(terminater);
-		manager.setGenerator(generator);
 		//
 		/// 実行する
 		Log.header(); /// < ログの見出しを出力する
