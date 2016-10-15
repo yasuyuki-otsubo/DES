@@ -46,7 +46,7 @@ public class TestSimple1 {
 		//
 		activity1.setId(2);
 		activity1.setName("処理する");
-		activity1.setWorkingTime(9); // 処理時間：５；ここをDurationより大きい数値にすると待ち行列が発生する
+		activity1.setWorkingTime(4); // 処理時間：５；ここをDurationより大きい数値にすると待ち行列が発生する
 		//
 		terminater.setId(3);
 		terminater.setName("完了");

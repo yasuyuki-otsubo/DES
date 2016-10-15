@@ -173,5 +173,7 @@ public class DESTaskManager {
 		System.out.println(" 6)発生個所　　　　　　　　　　　 : " + nodeName);
 		System.out.println(" 7)イベント毎の平均待ち時間　　　 : " + average_event);
 		System.out.println(" 8)アクティビティ毎の平均待ち時間 : " + average_act);
+		//
+		System.out.println("\n※ シミュレーションログは、time項(時間軸)を昇順に並び替えてください。");
 	}
 }

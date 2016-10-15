@@ -77,13 +77,9 @@ public class DESActivity extends DESObject {
 		//
 		// redundant している個数分イベント処理を行う
 		for (int ii = 0; ii < this.redundantNumber; ii++) {
-			//
+			// 安全のためにキューを先読みする
 			DESEvent event = this.queue.peekFirst();
-			if (event == null) {
-				break;
-			}
-			//
-			if (event.getArrivalTime() <= now) {
+			if ((event!=null)&&(event.getArrivalTime() <= now)) {
 				//
 				// 処理開始時間と終了時間を設定する
 				event.setProcessStartTime(workStartTime);
@@ -130,8 +126,10 @@ public class DESActivity extends DESObject {
 			// System.out.println(this.queue.size());
 			//
 			// FIXME: これだと正しい待ち行列数を示さない
-			if (maxQueueCount < this.queue.size()) {
-				maxQueueCount = this.queue.size();
+			// イベントは必ずキューを通して伝えるため、1を超えたときに記録する
+			int qsize = this.queue.size();
+			if ((qsize>1)&&(maxQueueCount < qsize)) {
+				maxQueueCount = qsize;
 			}
 		}
 		// FIXME: このようにすると、処理が一向に終わらなくなる。

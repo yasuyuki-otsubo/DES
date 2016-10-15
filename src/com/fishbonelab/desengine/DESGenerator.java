@@ -87,19 +87,19 @@ public class DESGenerator extends DESActivity {
 	 */
 	@Override
 	public void action(long past) {
+		//
 		while (true) {
 			//
 			// エラー防止のため、キューを先読みする
 			DESEvent event = this.queue.peekFirst();
-			if (event == null) {
-				break;
-			}
-			// 安全にキューからイベントを取得する
-			event = this.queue.pollFirst();
-			if (past > event.getStartTime()) {
+			if ((event!=null) &&(past >= event.getStartTime())) {
+				// 安全にキューからイベントを取得する
+				event = this.queue.pollFirst();
 				//
 				// イベントをアクティビティへ送る
 				this.getOutNode().setEvent(event);
+			} else {
+				break;
 			}
 		}
 	}
