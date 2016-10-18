@@ -16,10 +16,9 @@ import com.fishbonelab.desengine.utils.Log;
 public class TestSimple1 {
 
 	/**
-	 *
+	 * 到着／サービス／窓口数
 	 */
 	public TestSimple1() {
-		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
 	/**
@@ -29,6 +28,7 @@ public class TestSimple1 {
 		//
 		/// < (必須)タスクマネージャを作成する
 		DESTaskManager manager = new DESTaskManager();
+		manager.setName("超シンプルモデル(D/D/1)/動作確認用");
 
 		/// < ノードを作成する
 		DESGenerator generator = new DESGenerator();
