@@ -16,6 +16,7 @@ public class DESTaskManager {
 	//
 	private long maxQueueId = 0;
 	private long maxQueueCount = 0;
+	private String name = "";
 
 	/**
 	 *
@@ -175,5 +176,19 @@ public class DESTaskManager {
 		System.out.println(" 8)アクティビティ毎の平均待ち時間 : " + average_act);
 		//
 		System.out.println("\n※ シミュレーションログは、time項(時間軸)を昇順に並び替えてください。");
+	}
+
+	/**
+	 * @return name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name セットする name
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 }
