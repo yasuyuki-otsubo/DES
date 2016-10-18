@@ -13,13 +13,12 @@ import com.fishbonelab.desengine.utils.Log;
  * @author otuboyas
  *
  */
-public class TestSimple1 {
+public class TestSimple2 {
 
 	/**
 	 *
 	 */
-	public TestSimple1() {
-		// TODO 自動生成されたコンストラクター・スタブ
+	public TestSimple2() {
 	}
 
 	/**
@@ -33,6 +32,7 @@ public class TestSimple1 {
 		/// < ノードを作成する
 		DESGenerator generator = new DESGenerator();
 		DESActivity activity1 = new DESActivity();
+		DESActivity activity2 = new DESActivity();
 		DESTerminater terminater = new DESTerminater();
 
 		/// < ノードを定義する
@@ -41,24 +41,30 @@ public class TestSimple1 {
 		// generator.setTime(0);
 		generator.setStartTime(0); // 開始時間： ０
 		generator.setEndTime(20); // 終了時間：２０
-		generator.setDuration(15); // イベント発生間隔：１０
+		generator.setDuration(2); // イベント発生間隔：１０
 		generator.setAlgorithmName("一定間隔");
 		//
 		activity1.setId(2);
-		activity1.setName("処理する");
-		activity1.setWorkingTime(20); // 処理時間：５；ここをDurationより大きい数値にすると待ち行列が発生する
+		activity1.setName("処理1をする");
+		activity1.setWorkingTime(5); // 処理時間：５；ここをDurationより大きい数値にすると待ち行列が発生する
 		//
-		terminater.setId(3);
+		activity2.setId(3);
+		activity2.setName("処理2をする");
+		activity2.setWorkingTime(10); // 処理時間：10
+		//
+		terminater.setId(4);
 		terminater.setName("完了");
 
 		/// < ノード間を接続する ( set network among nodes.)
-		/// generator => activity1 => terminator
+		/// generator => activity1 => activity2 => terminator
 		generator.setOutNode(activity1);
-		activity1.setOutNode(terminater);
+		activity1.setOutNode(activity2);
+		activity2.setOutNode(terminater);
 
 		/// タスクマネージャにノードを登録する
 		manager.setGenerator(generator);
 		manager.addActivity(activity1);
+		manager.addActivity(activity2);
 		manager.addActivity(terminater);
 		//
 		/// 実行する

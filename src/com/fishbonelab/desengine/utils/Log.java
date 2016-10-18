@@ -4,6 +4,7 @@
 package com.fishbonelab.desengine.utils;
 
 import com.fishbonelab.desengine.DESActivity;
+import com.fishbonelab.desengine.DESBaseActivity;
 import com.fishbonelab.desengine.DESEvent;
 import com.fishbonelab.desengine.DESGenerator;
 import com.fishbonelab.desengine.DESTerminater;
@@ -38,7 +39,7 @@ public class Log {
 	 * @param event イベントオブジェクト
 	 * @param activity アクティビティ・オブジェクト
 	 */
-	protected static void out(ENUM_EVENTS etype, DESEvent event, DESActivity activity) {
+	protected static void out(ENUM_EVENTS etype, DESEvent event, DESBaseActivity activity) {
 		StringBuffer buf = new StringBuffer();
 		//
 		/// < construct message
@@ -138,7 +139,7 @@ public class Log {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param event
 	 * @param generator
 	 */
@@ -147,7 +148,7 @@ public class Log {
 	};
 
 	/**
-	 * 
+	 *
 	 * @param event
 	 * @param terminater
 	 */
@@ -156,7 +157,7 @@ public class Log {
 	};
 
 	/**
-	 * 
+	 *
 	 * @param event
 	 * @param activity
 	 */
@@ -165,7 +166,7 @@ public class Log {
 	};
 
 	/**
-	 * 
+	 *
 	 * @param event
 	 * @param activity
 	 */
@@ -174,7 +175,7 @@ public class Log {
 	};
 
 	/**
-	 * 
+	 *
 	 * @param event
 	 * @param activity
 	 */
@@ -183,7 +184,7 @@ public class Log {
 	};
 
 	/**
-	 * 
+	 *
 	 * @param event
 	 * @param activity
 	 */

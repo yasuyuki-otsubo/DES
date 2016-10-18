@@ -9,7 +9,7 @@ import com.fishbonelab.desengine.utils.Log;
  * @author otuboyas
  *
  */
-public class DESGenerator extends DESActivity {
+public class DESGenerator extends DESBaseActivity {
 
 	private long eventCount;
 	private String algorithmName;
@@ -56,7 +56,7 @@ public class DESGenerator extends DESActivity {
 		}
 		//
 		int id = 0;
-		for (long now = startTime; now < endTime; now += duration) {
+		for (long now = startTime; now <= endTime; now += duration) {
 			/// idを更新する
 			id++;
 			/// イベントを作成する
@@ -92,9 +92,12 @@ public class DESGenerator extends DESActivity {
 			//
 			// エラー防止のため、キューを先読みする
 			DESEvent event = this.queue.peekFirst();
-			if ((event!=null) &&(past >= event.getStartTime())) {
-				// 安全にキューからイベントを取得する
-				event = this.queue.pollFirst();
+			if ((event != null) && (past >= event.getStartTime())) {
+				// 安全にキューからイベントを削除する
+				this.queue.pollFirst();
+				//
+				// イベント送付先の時間を設定する
+				this.getOutNode().setTime(past);
 				//
 				// イベントをアクティビティへ送る
 				this.getOutNode().setEvent(event);
@@ -147,22 +150,6 @@ public class DESGenerator extends DESActivity {
 	}
 
 	/**
-	 * @return outNode
-	 */
-	@Override
-	public DESActivity getOutNode() {
-		return outNode;
-	}
-
-	/**
-	 * @param outNode セットする outNode
-	 */
-	@Override
-	public void setOutNode(DESActivity outNode) {
-		this.outNode = outNode;
-	}
-
-	/**
 	 * @return eventCount
 	 */
 	public long getEventCount() {
@@ -181,5 +168,10 @@ public class DESGenerator extends DESActivity {
 	 */
 	public void setAlgorithmName(String algorithmName) {
 		this.algorithmName = algorithmName;
+	}
+
+	@Override
+	public void setEvent(DESEvent event) {
+		// TODO 自動生成されたメソッド・スタブ
 	}
 }

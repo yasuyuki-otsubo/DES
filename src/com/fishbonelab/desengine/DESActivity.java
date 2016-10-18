@@ -11,23 +11,15 @@ import com.fishbonelab.desengine.utils.Log;
  * @author otuboyas
  *
  */
-public class DESActivity extends DESObject {
-
-	protected DESActivity outNode;
-	protected LinkedList<DESEvent> queue;
-	private int maxQueueCount;
+public class DESActivity extends DESBaseActivity {
 
 	/**
 	 * @return maxQueueCount
 	 */
+	@Override
 	public int getMaxQueueCount() {
 		return maxQueueCount;
 	}
-
-	private long workingTime;
-	private long workStartTime;
-	private long redundantType;
-	private long redundantNumber;
 
 	/**
 	 *
@@ -44,23 +36,10 @@ public class DESActivity extends DESObject {
 	}
 
 	/**
-	 * @return outNode
-	 */
-	public DESActivity getOutNode() {
-		return outNode;
-	}
-
-	/**
-	 * @param outNode セットする outNode
-	 */
-	public void setOutNode(DESActivity outNode) {
-		this.outNode = outNode;
-	}
-
-	/**
 	 * 実行エンジンによりタイムスケール間隔で呼び出される。
 	 * @param past 実行エンジン内の現在時間を渡される。
 	 */
+	@Override
 	public void action(long past) {
 		//
 		// 作業開始時間を判定する
@@ -79,7 +58,7 @@ public class DESActivity extends DESObject {
 		for (int ii = 0; ii < this.redundantNumber; ii++) {
 			// 安全のためにキューを先読みする
 			DESEvent event = this.queue.peekFirst();
-			if ((event!=null)&&(event.getArrivalTime() <= now)) {
+			if ((event != null) && (event.getArrivalTime() <= now)) {
 				//
 				// 処理開始時間と終了時間を設定する
 				event.setProcessStartTime(workStartTime);
@@ -111,6 +90,7 @@ public class DESActivity extends DESObject {
 	 * Activityが作業中の場合は、Activityの待ち行列に入れる。
 	 * @param event
 	 */
+	@Override
 	public void setEvent(DESEvent event) {
 		long now = this.getTime();
 		//
@@ -128,7 +108,10 @@ public class DESActivity extends DESObject {
 			// FIXME: これだと正しい待ち行列数を示さない
 			// イベントは必ずキューを通して伝えるため、1を超えたときに記録する
 			int qsize = this.queue.size();
-			if ((qsize>1)&&(maxQueueCount < qsize)) {
+			// if ((qsize > 1) && (maxQueueCount < qsize)) {
+			// maxQueueCount = qsize;
+			// }
+			if (maxQueueCount < qsize) {
 				maxQueueCount = qsize;
 			}
 		}
@@ -136,51 +119,5 @@ public class DESActivity extends DESObject {
 		// FIXME: 代替として、マネージャにて実行処理を制御する
 		// イベント処理を行う
 		// this.doAction(now);
-	}
-
-	public boolean isEmpty() {
-		return this.queue.isEmpty();
-	}
-
-	/**
-	 * @return workingTime
-	 */
-	public long getWorkingTime() {
-		return workingTime;
-	}
-
-	/**
-	 * @param workingTime セットする workingTime
-	 */
-	public void setWorkingTime(long workingTime) {
-		this.workingTime = workingTime;
-	}
-
-	/**
-	 * @return redundantType
-	 */
-	public long getRedundantType() {
-		return redundantType;
-	}
-
-	/**
-	 * @param redundantType セットする redundantType
-	 */
-	public void setRedundantType(long redundantType) {
-		this.redundantType = redundantType;
-	}
-
-	/**
-	 * @return redundantNumber
-	 */
-	public long getRedundantNumber() {
-		return redundantNumber;
-	}
-
-	/**
-	 * @param redundantNumber セットする redundantNumber
-	 */
-	public void setRedundantNumber(long redundantNumber) {
-		this.redundantNumber = redundantNumber;
 	}
 }

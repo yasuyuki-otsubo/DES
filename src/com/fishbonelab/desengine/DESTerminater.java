@@ -9,7 +9,7 @@ import com.fishbonelab.desengine.utils.Log;
  * @author otuboyas
  *
  */
-public class DESTerminater extends DESActivity {
+public class DESTerminater extends DESBaseActivity {
 
 	private long totalWaitingTime = 0;
 

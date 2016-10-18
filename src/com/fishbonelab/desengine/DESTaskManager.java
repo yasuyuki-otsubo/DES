@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class DESTaskManager {
 
-	private ArrayList<DESActivity> list;
+	private ArrayList<DESBaseActivity> list;
 	private DESGenerator generator;
 	//
 	private long maxQueueId = 0;
@@ -21,18 +21,18 @@ public class DESTaskManager {
 	 *
 	 */
 	public DESTaskManager() {
-		list = new ArrayList<DESActivity>();
+		list = new ArrayList<DESBaseActivity>();
 	}
 
-	public void addActivity(DESActivity activity) {
+	public void addActivity(DESBaseActivity activity) {
 		//
 		list.add(activity);
 	}
 
 	private void doOneStep(long now) {
 		if (!list.isEmpty()) {
-			for (DESActivity act : list) {
-				if (act instanceof DESActivity) {
+			for (DESBaseActivity act : list) {
+				if (act instanceof DESBaseActivity) {
 					act.action(now);
 				}
 			}
@@ -43,8 +43,8 @@ public class DESTaskManager {
 		boolean result = true;
 		//
 		if (!list.isEmpty()) {
-			for (DESActivity act : list) {
-				if (act instanceof DESActivity) {
+			for (DESBaseActivity act : list) {
+				if (act instanceof DESBaseActivity) {
 					if (!act.isEmpty()) {
 						result = false;
 						break;
@@ -100,7 +100,7 @@ public class DESTaskManager {
 		long max = 0;
 		long id = 0;
 
-		for (DESActivity activity : this.list) {
+		for (DESBaseActivity activity : this.list) {
 			if (max < activity.getMaxQueueCount()) {
 				max = activity.getMaxQueueCount();
 				id = activity.getId();
@@ -115,7 +115,7 @@ public class DESTaskManager {
 	private DESTerminater getTerminater() {
 		DESTerminater term = null;
 
-		for (DESActivity act : this.list) {
+		for (DESBaseActivity act : this.list) {
 			if (act instanceof DESTerminater) {
 				term = (DESTerminater) act;
 				break;
