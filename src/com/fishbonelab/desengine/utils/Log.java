@@ -15,6 +15,9 @@ import com.fishbonelab.desengine.DESTerminater;
  */
 public class Log {
 
+	private static final String TAG = "LOG,";
+	private static final String TAG_DES = "DES,";
+
 	private enum ENUM_EVENTS {
 		EVENT_ARRIVAL, EVENT_START, EVENT_END, EVENT_DEPARTURE, EVENT_CREATE, EVENT_FINISH
 	};
@@ -29,7 +32,7 @@ public class Log {
 	 * ログヘッダを出力する
 	 */
 	public static void header() {
-		String title = "event_id, action, time, pid, memo";
+		String title = TAG_DES + "event_id, action, time, pid, memo";
 		System.out.println(title);
 	}
 
@@ -43,6 +46,7 @@ public class Log {
 		StringBuffer buf = new StringBuffer();
 		//
 		/// < construct message
+		buf.append(TAG_DES);
 		buf.append(event.getId());
 		switch (etype) {
 			case EVENT_ARRIVAL:
@@ -94,6 +98,7 @@ public class Log {
 		StringBuffer buf = new StringBuffer();
 		//
 		/// < construct message
+		buf.append(TAG_DES);
 		buf.append(event.getId());
 		switch (etype) {
 			case EVENT_ARRIVAL:
