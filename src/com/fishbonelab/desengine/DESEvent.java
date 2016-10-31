@@ -32,7 +32,7 @@ public class DESEvent extends DESObject {
 	/**
 	 *
 	 */
-	public void setTimestamp() {
+/*	public void setTimestamp() {
 		long currentTime = new Date().getTime();
 		if (this.startTime == -1) {
 			this.startTime = currentTime;
@@ -48,7 +48,7 @@ public class DESEvent extends DESObject {
 			this.departureTime = currentTime;
 		}
 	}
-
+*/
 	/**
 	 * @return startTime
 	 */
