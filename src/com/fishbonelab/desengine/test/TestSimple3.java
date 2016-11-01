@@ -7,7 +7,6 @@ import com.fishbonelab.desengine.DESActivity;
 import com.fishbonelab.desengine.DESGenerator;
 import com.fishbonelab.desengine.DESTaskManager;
 import com.fishbonelab.desengine.DESTerminater;
-import com.fishbonelab.desengine.utils.Log;
 
 /**
  * @author otuboyas
@@ -45,7 +44,7 @@ public class TestSimple3 {
 		generator.setAlgorithmName("一定間隔");
 		//
 		activity1.setId(2);
-		activity1.setRedundantNumber(2);
+		activity1.setRedundantNumber(2); // 窓口の数を複数にする
 		activity1.setName("処理1をする");
 		activity1.setWorkingTime(5); // 処理時間：５；ここをDurationより大きい数値にすると待ち行列が発生する
 		//
@@ -63,8 +62,7 @@ public class TestSimple3 {
 		manager.addActivity(terminater);
 		//
 		/// 実行する
-		System.out.println(manager.getName());
-		Log.header(); /// < ログの見出しを出力する
+		manager.showHeader();
 		manager.simulate();
 		//
 		// 統計情報を出力する

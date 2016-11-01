@@ -93,7 +93,7 @@ public class Log {
 	 * @param etype イベントタイプ
 	 * @param event イベントオブジェクト
 	 */
-	protected static void out2(ENUM_EVENTS etype, DESEvent event) {
+	/*	protected static void out2(ENUM_EVENTS etype, DESEvent event) {
 		String msg = "";
 		StringBuffer buf = new StringBuffer();
 		//
@@ -142,7 +142,7 @@ public class Log {
 		//
 		System.out.println(buf.toString());
 	}
-
+	 */
 	/**
 	 *
 	 * @param event
