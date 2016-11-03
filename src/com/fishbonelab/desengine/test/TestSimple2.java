@@ -7,7 +7,6 @@ import com.fishbonelab.desengine.DESActivity;
 import com.fishbonelab.desengine.DESGenerator;
 import com.fishbonelab.desengine.DESTaskManager;
 import com.fishbonelab.desengine.DESTerminater;
-import com.fishbonelab.desengine.utils.Log;
 
 /**
  * @author otuboyas
@@ -68,7 +67,7 @@ public class TestSimple2 {
 		manager.addActivity(terminater);
 		//
 		/// 実行する
-		Log.header(); /// < ログの見出しを出力する
+		manager.showHeader();
 		manager.simulate();
 		//
 		// 統計情報を出力する

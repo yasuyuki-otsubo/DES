@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class DESTaskManager {
 
 	private static final String TAG = "DESTaskManager";
+	private static final String TAG_HEADER = "TITLE,";
 	private static final String TAG_STAT = "STAT,";
 	private ArrayList<DESBaseActivity> list;
 	private DESGenerator generator;
@@ -62,10 +63,10 @@ public class DESTaskManager {
 	/**
 	 * @return generator
 	 */
-	public DESGenerator getGenerator() {
+	/*	public DESGenerator getGenerator() {
 		return generator;
 	}
-
+	 */
 	/**
 	 * @param generator セットする generator
 	 */
@@ -128,6 +129,11 @@ public class DESTaskManager {
 		return term;
 	}
 
+	public void showHeader() {
+		System.out.println(TAG_HEADER + "==================================================");
+		System.out.println(TAG_HEADER + this.getName());
+		System.out.println(TAG_HEADER + "==================================================");
+	}
 	/**
 	 *
 	 * 1)基本
