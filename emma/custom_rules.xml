@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="stepcounter2html">
+
+    <property file="project.properties" />
+    <property file="ant.properties" />
+    <property file="local.properties" />
+
+    <property name="reports.dir" value="reports" />
+    
+    <property name="reports.emma" value="${reports.dir}/emma" />
+    <property name="reports.emma.files" value="${reports.emma}/_files" />
+    
+    <property name="reports.stepcounter" value="${reports.dir}/stepcounter" />
+    
+    <property name="reports.lint" value="${reports.dir}/lint" />
+    
+    <property name="reports.findbugs" value="${reports.dir}/findbugs" />
+    <property name="reports.pmd" value="${reports.dir}/pmd" />
+    <property name="reports.cpd" value="${reports.dir}/cpd" />
+    
+    <property name="reports.product" value="${reports.dir}/products" />
+    
+    <property name="jar-source-name" value="${ant.project.name}-source.jar" />
+
+    <!-- ******************************************************* -->
+    <!-- * Make Directory For Report                           * -->
+    <!-- ******************************************************* -->
+    <target name="-init.reports.dir">
+        <mkdir dir="${reports.dir}" />
+        <mkdir dir="${reports.findbugs}" />
+        <mkdir dir="${reports.lint}" />
+        <mkdir dir="${reports.stepcounter}" />
+        <mkdir dir="${reports.emma}" />
+        <mkdir dir="${reports.emma.files}" />
+
+        <mkdir dir="${reports.product}" />
+        <mkdir dir="${reports.pmd}" />
+        <mkdir dir="${reports.cpd}" />
+    </target>
+
+    <!-- ******************************************************* -->
+    <!-- * FindBugs                                            * -->
+    <!-- ******************************************************* -->
+    <target name="findbugs"
+            if="findbugs.home"
+            description="Findbugs Execute."
+            depends="-init.reports.dir">
+
+        <taskdef name="findbugs"
+                 classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
+                 classpath="${findbugs.home}/lib/findbugs-ant.jar" />
+
+        <findbugs excludeFilter="findbugs-exclude.xml"
+                  home="${findbugs.home}"
+                  output="xml"
+                  outputFile="${reports.findbugs}/findbugs.xml">
+            <auxClasspath path="${android.jar}" />
+            <class location="${out.dir}" />
+        </findbugs>
+
+        <findbugs excludeFilter="findbugs-exclude.xml"
+                  home="${findbugs.home}"
+                  output="xml:withMessages"
+                  outputFile="${reports.findbugs}/findbugsWithMessage.xml">
+            <auxClasspath path="${android.jar}" />
+            <class location="${out.dir}" />
+        </findbugs>
+
+        <findbugs excludeFilter="findbugs-exclude.xml"
+                  home="${findbugs.home}"
+                  output="html"
+                  outputFile="${reports.findbugs}/findbugs.html">
+            <auxClasspath path="${android.jar}" />
+            <class location="${out.dir}" />
+        </findbugs>
+
+    </target>
+
+    <!-- ******************************************************* -->
+    <!-- * Android Lint                                        * -->
+    <!-- ******************************************************* -->
+    <target name="lint"
+            if="sdk.dir"
+            description="Android Lint Execute."
+            depends="-init.reports.dir">
+        <!-- switch lint command for linux and windows -->
+
+        <condition else="${sdk.dir}/tools/lint.bat"
+                   property="lint.script"
+                   value="${sdk.dir}/tools/lint.sh">
+            <and>
+                <not>
+                    <os family="windows" />
+                </not>
+            </and>
+        </condition>
+
+        <exec executable="${lint.script}">
+            <arg value="-Wall" />
+            <arg value="--html" />
+            <arg value="${reports.lint}/lint_report.html" />
+            <arg value="--xml" />
+            <arg value="${reports.lint}/lint-results.xml" />
+            <arg value="./" />
+        </exec>
+
+        <echo>Lint Execute : ${ant.project.name}</echo>
+
+    </target>
+
+    <!-- ******************************************************* -->
+    <!-- * Doxygen                                             * -->
+    <!-- ******************************************************* -->
+    <target name="doxygen" if="ant.project.name" description="Doxygen Execute.">
+        <exec executable="doxygen">
+            <arg value="${ant.project.name}.doxyfile" />
+        </exec>
+    </target>
+
+    <!-- ******************************************************* -->
+    <!-- * StepCounter                                         * -->
+    <!-- ******************************************************* -->
+    <target name="stepcounter"
+            if="stepcounter.jar"
+            description="StepCount Execute."
+            depends="-init.reports.dir">
+
+        <taskdef name="stepcounter"
+                 classname="jp.sf.amateras.stepcounter.ant.StepCounterTask"
+                 classpath="${stepcounter.jar}" />
+
+        <taskdef name="diffcounter"
+                 classname="jp.sf.amateras.stepcounter.ant.DiffCounterTask"
+                 classpath="${stepcounter.jar}" />
+
+        <stepcounter encoding="UTF-8"
+                     format="csv"
+                     output="${reports.stepcounter}/count.csv">
+            <fileset dir=".">
+                <include name="/src/**/*.java" />
+                <include name="/src/**/*.as" />
+                <include name="/res/**/*.xml" />
+                <include name="AndroidManifest.xml" />
+            </fileset>
+        </stepcounter>
+
+        <stepcounter encoding="UTF-8"
+                     format="xml"
+                     output="${reports.stepcounter}/count.xml">
+            <fileset dir=".">
+                <include name="/src/**/*.java" />
+                <include name="/src/**/*.as" />
+                <include name="/res/**/*.xml" />
+                <include name="AndroidManifest.xml" />
+            </fileset>
+        </stepcounter>
+
+        <stepcounter encoding="UTF-8"
+                     format="excel"
+                     output="${reports.stepcounter}/count.xls">
+            <fileset dir=".">
+                <include name="/src/**/*.java" />
+                <include name="/src/**/*.as" />
+                <include name="/res/**/*.xml" />
+                <include name="AndroidManifest.xml" />
+            </fileset>
+        </stepcounter>
+    </target>
+
+    <!-- ******************************************************* -->
+    <!-- * Stepcounter Transfar Html                           * -->
+    <!-- ******************************************************* -->
+    <target name="stepcounter2html"
+            if="stepcounter.home"
+            depends="stepcounter"
+            description="StepCount Result Xml transfer Html.">
+
+
+        <xslt style="${stepcounter.home}/stepcounter2html.xsl"
+              in="${reports.stepcounter}/count.xml"
+              out="${reports.stepcounter}/count.html" />
+
+    </target>
+
+    <!-- ******************************************************* -->
+    <!-- * PMD Report                                          * -->
+    <!-- ******************************************************* -->
+    <target name="pmd"
+            if="pmd.home"
+            description="PMD Execute."
+            depends="-init.reports.dir">
+
+        <path id="pmd.lib.path">
+            <fileset dir="${pmd.home}/lib">
+                <include name="*.jar" />
+            </fileset>
+        </path>
+
+        <taskdef name="pmd"
+                 classname="net.sourceforge.pmd.ant.PMDTask"
+                 classpathref="pmd.lib.path" />
+
+        <pmd rulesetfiles="pmd_ruleset.xml">
+            <formatter type="xml" toFile="${reports.pmd}/pmd.xml" />
+            <formatter type="csv" toFile="${reports.pmd}/pmd.csv" />
+            <formatter type="html" toFile="${reports.pmd}/pmd.html" />
+            <fileset dir="src">
+                <include name="**/*.java" />
+            </fileset>
+        </pmd>
+
+    </target>
+
+    <!-- ******************************************************* -->
+    <!-- * CPD Report                                          * -->
+    <!-- ******************************************************* -->
+    <target name="cpd"
+            if="pmd.home"
+            description="CPD Execute."
+            depends="-init.reports.dir">
+
+        <path id="pmd.lib.path">
+            <fileset dir="${pmd.home}/lib">
+                <include name="*.jar" />
+            </fileset>
+        </path>
+
+        <taskdef name="cpd"
+                 classname="net.sourceforge.pmd.cpd.CPDTask"
+                 classpathref="pmd.lib.path" />
+
+        <cpd encoding="UTF-8"
+             minimumTokenCount="30"
+             language="java"
+             format="xml"
+             outputFile="${reports.cpd}/cpd.xml">
+            <fileset dir="src">
+                <include name="**/*.java" />
+            </fileset>
+        </cpd>
+    </target>
+
+    <!-- ******************************************************* -->
+    <!-- * EMMA Report                                         * -->
+    <!-- ******************************************************* -->
+    <target name="fetch-test-report"
+            if="out.absolute.dir"
+            description="Move EMMA Result Xml/Html."
+            depends="-init.reports.dir">
+
+        <move todir="${reports.emma}" overwrite="yes">
+            <fileset dir="${out.absolute.dir}" includes="coverage.*" />
+        </move>
+        <move todir="${reports.emma.files}" overwrite="yes">
+            <fileset dir="${out.absolute.dir}/_files" includes="*.html" />
+        </move>
+
+    </target>
+
+    <!-- ******************************************************* -->
+    <!-- * Debug Jar                                           * -->
+    <!-- ******************************************************* -->
+    <target name="debug-product"
+            if="ant.project.name"
+            description="Rename Debug APK/Jar File"
+            depends="-init.reports.dir">
+            
+        <if condition="${project.is.library}">
+            <then>
+                <move file="${out.absolute.dir}/classes.jar"
+                      tofile="${reports.product}/${ant.project.name}-debug.jar" />
+                <copy file="${reports.product}/${ant.project.name}-debug.jar"
+                      tofile="${reports.product}/${ant.project.name}.jar" />
+                <copy file="${reports.product}/${ant.project.name}.jar"
+                      tofile="${out.absolute.dir}/${ant.project.name}.jar" />
+            </then>
+            <else>
+                <move file="${out.absolute.dir}/${ant.project.name}-debug.apk"
+                      todir="${reports.product}" />
+                <move file="${out.absolute.dir}/${ant.project.name}-debug-unaligned.apk"
+                      todir="${reports.product}" />
+                <copy file="${reports.product}/${ant.project.name}-debug.apk"
+                      tofile="${reports.product}/${ant.project.name}.apk" />
+                <copy file="${reports.product}/${ant.project.name}.apk"
+                      tofile="${out.absolute.dir}/${ant.project.name}.apk" />
+            </else>
+        </if>
+
+    </target>
+
+    <!-- ******************************************************* -->
+    <!-- * Release Jar                                         * -->
+    <!-- ******************************************************* -->
+    <target name="release-product"
+            if="ant.project.name"
+            description="Rename Release APK/Jar File"
+            depends="-init.reports.dir">
+
+        <if condition="${project.is.library}">
+            <then>
+                <move file="${out.absolute.dir}/classes.jar"
+                      tofile="${reports.product}/${ant.project.name}-release.jar" />
+                <copy file="${reports.product}/${ant.project.name}-release.jar"
+                      tofile="${reports.product}/${ant.project.name}.jar" />
+                <copy file="${reports.product}/${ant.project.name}.jar"
+                      tofile="${out.absolute.dir}/${ant.project.name}.jar" />
+            </then>
+            <else>
+                <move file="${out.absolute.dir}/${ant.project.name}-release.apk"
+                      todir="${reports.product}" />
+                <move file="${out.absolute.dir}/${ant.project.name}-release-unaligned.apk"
+                      todir="${reports.product}" />
+                <copy file="${reports.product}/${ant.project.name}-release.apk"
+                      tofile="${reports.product}/${ant.project.name}.apk" />
+                <copy file="${reports.product}/${ant.project.name}.apk"
+                      tofile="${out.absolute.dir}/${ant.project.name}.apk" />
+            </else>
+        </if>
+        
+    </target>
+
+
+    <!-- ******************************************************* -->
+    <!-- * Source Jar                                          * -->
+    <!-- ******************************************************* -->
+    <target name="source-jar"
+            if="ant.project.name"
+            description="Create Source Jar"
+            depends="-init.reports.dir">
+        <jar basedir="./src" jarfile="${reports.product}/${jar-source-name}" />
+    </target>
+</project>
