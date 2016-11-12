@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class DESTaskManager {
 
-	private static final String TAG = "DESTaskManager";
+	//private static final String TAG = "DESTaskManager";
 	private static final String TAG_HEADER = "TITLE,";
 	private static final String TAG_STAT = "STAT,";
 	private ArrayList<DESBaseActivity> list;

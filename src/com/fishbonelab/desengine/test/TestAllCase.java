@@ -18,19 +18,17 @@ public class TestAllCase {
 	public void test() {
 		//
 		// run TestSample1
-		TestSimple1 sample1 = new TestSimple1();
-		sample1.main(null);
+		// TestSimple1 sample1 = new TestSimple1();
+		TestSimple1.main(null);
 
 		//
 		// run TestSample2
-		TestSimple2 sample2 = new TestSimple2();
-		sample2.main(null);
+		// TestSimple2 sample2 = new TestSimple2();
+		TestSimple2.main(null);
 
 		//
 		// run TestSample1
-		TestSimple3 sample3 = new TestSimple3();
-		sample3.main(null);
-
+		// TestSimple3 sample3 = new TestSimple3();
+		TestSimple3.main(null);
 	}
-
 }

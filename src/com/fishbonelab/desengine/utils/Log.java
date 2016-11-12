@@ -15,7 +15,7 @@ import com.fishbonelab.desengine.DESTerminater;
  */
 public class Log {
 
-	private static final String TAG = "LOG,";
+	//private static final String TAG = "LOG,";
 	private static final String TAG_DES = "DES,";
 
 	private enum ENUM_EVENTS {
